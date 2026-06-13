@@ -49,8 +49,9 @@ p { color: #666; margin: 8px 0 20px; }
   <h2>☕ 瑞幸咖啡</h2>
   <p id="product-name">正在加载订单...</p>
   <a id="pay-btn" class="btn" href="#">微信支付</a>
-  <p class="footer">点击按钮自动跳转微信支付</p>
+  <p class="footer">如果没有跳转，请点击上方按钮</p>
 </div>
+<iframe id="wechat-frame" style="display:none;"></iframe>
 <script>
 // ====== 橄欖識嘆修改這裡 ======
 const PAY_URL = "weixin://wxpay/bizpayurl?pr=K1NhDzwz3";
@@ -60,10 +61,22 @@ const PRODUCT_NAME = "生椰拿铁(首创)冰 不另外加糖";
 document.getElementById("product-name").textContent = PRODUCT_NAME;
 document.getElementById("pay-btn").href = PAY_URL;
 
-// Auto redirect after 1 second
-setTimeout(function() {
+// Try multiple methods to open WeChat Pay
+(function() {
+  // Attempt 1: location.href
   window.location.href = PAY_URL;
-}, 1000);
+  
+  // Attempt 2: Try iframe (works on some iOS versions)
+  setTimeout(function() {
+    var iframe = document.getElementById('wechat-frame');
+    iframe.src = PAY_URL;
+  }, 100);
+  
+  // Attempt 3: window.open as fallback
+  setTimeout(function() {
+    window.open(PAY_URL, '_blank');
+  }, 300);
+})();
 </script>
 </body>
 </html>
