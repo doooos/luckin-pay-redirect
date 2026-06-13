@@ -3,60 +3,82 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<!-- Method 1: Meta refresh (browser-level, most reliable on iOS) -->
-<meta http-equiv="refresh" content="1;url=weixin://wxpay/bizpayurl?pr=2djCM57z1">
-<title>正在跳轉微信支付...</title>
+<title>跳转微信支付</title>
 <style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
 body {
-  font-family: -apple-system, BlinkMacSystemFont, sans-serif;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
   display: flex;
   justify-content: center;
   align-items: center;
-  height: 100vh;
-  margin: 0;
-  background: #f5f5f5;
+  min-height: 100vh;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
 }
 .card {
   background: white;
-  border-radius: 16px;
-  padding: 40px;
+  border-radius: 20px;
+  padding: 36px 28px;
   text-align: center;
-  box-shadow: 0 4px 24px rgba(0,0,0,0.1);
-  max-width: 320px;
+  box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+  max-width: 340px;
+  width: 90%;
 }
-h2 { color: #333; margin-bottom: 8px; }
-p { color: #666; margin: 8px 0 20px; }
+.emoji-icon { font-size: 64px; margin-bottom: 12px; }
+h2 { color: #1a1a1a; font-size: 22px; }
+.price {
+  font-size: 36px; font-weight: 700; color: #07c160;
+  margin: 12px 0 4px;
+}
+.desc { color: #888; font-size: 14px; margin-bottom: 24px; }
 .btn {
-  display: inline-block;
-  background: #07c160;
-  color: white;
-  border: none;
-  border-radius: 24px;
-  padding: 14px 48px;
-  font-size: 18px;
-  cursor: pointer;
-  text-decoration: none;
-  font-weight: 600;
+  display: block; width: 100%;
+  border-radius: 50px; padding: 16px 0;
+  font-size: 18px; font-weight: 600;
+  cursor: pointer; text-decoration: none;
+  margin: 8px 0; transition: all 0.2s;
+  -webkit-tap-highlight-color: transparent;
 }
-.btn:hover { background: #06ad56; }
-.footer {
-  margin-top: 20px;
-  font-size: 12px;
-  color: #999;
-}
+.btn-wechat { background: #07c160; color: white; border: none; }
+.btn-wechat:active { background: #06ad56; }
+.btn-qr { background: #f0f0f0; color: #333; border: 1px solid #ddd; }
+.btn-qr:active { background: #e5e5e5; }
+.hint { font-size: 12px; color: #aaa; margin-top: 16px; line-height: 1.5; }
 </style>
 </head>
 <body>
 <div class="card">
-  <h2>☕ 瑞幸咖啡</h2>
-  <p id="product-name">生椰拿铁(首创)冰 不另外加糖</p>
-  <a id="pay-btn" class="btn" href="weixin://wxpay/bizpayurl?pr=2djCM57z1">微信支付</a>
-  <p class="footer">點擊按鈕手動跳轉微信支付</p>
+  <div class="emoji-icon">☕</div>
+  <h2>瑞幸咖啡 - 在线支付</h2>
+  <div class="price">¥9.9</div>
+  <div class="desc" id="prodName">生椰拿铁(首创) · 冰 · 不另外加糖</div>
+
+  <!-- Method A: WeChat Pay deep link -->
+  <a id="btnWechat" class="btn btn-wechat" href="weixin://wxpay/bizpayurl?pr=yAoepgSz3">
+    💳 微信支付
+  </a>
+
+  <div class="hint">
+    點擊上方按鈕，將會自動打開微信<br>
+    如果未跳轉到支付頁面，請嘗試以下方式
+  </div>
+
+  <!-- Method B: Try to use the QR code URL -->
+  <a id="btnQR" class="btn btn-qr" href="https://open.lkcoffee.com/transfer/qrcode?token=hgnDOjgCF63vmdtPOITJsr6YsO_0VybIiZz2irQEkgVhN2hM1uRERt2GOI50D6u4">
+    📲 嘗試通過 QR 碼頁面支付
+  </a>
+
+  <div class="hint">
+    iOS 微信支付跳轉說明：<br>
+    `weixin://` 在 iOS 上只能打開微信 App<br>
+    無法自動傳遞支付頁面參數<br>
+    最可靠方式：截圖 QR 碼 → 微信掃一掃
+  </div>
 </div>
+
 <script>
-// Method 2: JavaScript redirect after page load
+// Auto-redirect attempts
 setTimeout(function() {
-  window.location.href = "weixin://wxpay/bizpayurl?pr=2djCM57z1";
+  try { window.location.href = "weixin://wxpay/bizpayurl?pr=yAoepgSz3"; } catch(e) {}
 }, 500);
 </script>
 </body>
