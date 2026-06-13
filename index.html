@@ -25,11 +25,21 @@ body {
 }
 .emoji-icon { font-size: 64px; margin-bottom: 12px; }
 h2 { color: #1a1a1a; font-size: 22px; }
-.price {
-  font-size: 36px; font-weight: 700; color: #07c160;
-  margin: 12px 0 4px;
+.price { font-size: 36px; font-weight: 700; color: #07c160; margin: 12px 0 4px; }
+.desc { color: #888; font-size: 14px; margin-bottom: 20px; }
+.qr-container {
+  background: #f9f9f9;
+  border-radius: 16px;
+  padding: 20px;
+  margin: 16px 0;
 }
-.desc { color: #888; font-size: 14px; margin-bottom: 24px; }
+.qr-container canvas, .qr-container img {
+  width: 200px;
+  height: 200px;
+  display: block;
+  margin: 0 auto;
+}
+.qr-hint { font-size: 12px; color: #999; margin-top: 8px; }
 .btn {
   display: block; width: 100%;
   border-radius: 50px; padding: 16px 0;
@@ -38,12 +48,11 @@ h2 { color: #1a1a1a; font-size: 22px; }
   margin: 8px 0; transition: all 0.2s;
   -webkit-tap-highlight-color: transparent;
 }
-.btn-wechat { background: #07c160; color: white; border: none; }
+.btn-wechat { background: #07c160; color: white; }
 .btn-wechat:active { background: #06ad56; }
-.btn-qr { background: #f0f0f0; color: #333; border: 1px solid #ddd; }
-.btn-qr:active { background: #e5e5e5; }
 .hint { font-size: 12px; color: #aaa; margin-top: 16px; line-height: 1.5; }
 </style>
+<script src="https://cdn.jsdelivr.net/npm/qrcodejs@1.0.0/qrcode.js"></script>
 </head>
 <body>
 <div class="card">
@@ -52,33 +61,33 @@ h2 { color: #1a1a1a; font-size: 22px; }
   <div class="price">¥9.9</div>
   <div class="desc" id="prodName">生椰拿铁(首创) · 冰 · 不另外加糖</div>
 
-  <!-- Method A: WeChat Pay deep link -->
+  <!-- 微信支付按钮 -->
   <a id="btnWechat" class="btn btn-wechat" href="weixin://wxpay/bizpayurl?pr=yAoepgSz3">
     💳 微信支付
   </a>
 
-  <div class="hint">
-    點擊上方按鈕，將會自動打開微信<br>
-    如果未跳轉到支付頁面，請嘗試以下方式
-  </div>
+  <div class="hint">點擊上方按鈕 -> 打開微信</div>
 
-  <!-- Method B: Try to use the QR code URL -->
-  <a id="btnQR" class="btn btn-qr" href="https://open.lkcoffee.com/transfer/qrcode?token=hgnDOjgCF63vmdtPOITJsr6YsO_0VybIiZz2irQEkgVhN2hM1uRERt2GOI50D6u4">
-    📲 嘗試通過 QR 碼頁面支付
-  </a>
-
-  <div class="hint">
-    iOS 微信支付跳轉說明：<br>
-    `weixin://` 在 iOS 上只能打開微信 App<br>
-    無法自動傳遞支付頁面參數<br>
-    最可靠方式：截圖 QR 碼 → 微信掃一掃
+  <!-- QR Code -->
+  <div class="qr-container">
+    <div id="qrcode"></div>
+    <div class="qr-hint">📱 截圖此頁 → 微信掃一掃支付</div>
   </div>
 </div>
 
 <script>
-// Auto-redirect attempts
+var PAY_URL = "weixin://wxpay/bizpayurl?pr=yAoepgSz3";
+
+// Generate QR code
+new QRCode(document.getElementById("qrcode"), {
+  text: PAY_URL,
+  width: 200,
+  height: 200
+});
+
+// Auto-redirect
 setTimeout(function() {
-  try { window.location.href = "weixin://wxpay/bizpayurl?pr=yAoepgSz3"; } catch(e) {}
+  try { window.location.href = PAY_URL; } catch(e) {}
 }, 500);
 </script>
 </body>
